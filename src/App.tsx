@@ -14,7 +14,7 @@ export const App = () => { //Functional Component
   //TODO: deploy base mvp to github pages
   return (
         <Switch>
-          <Route exact path = '/ballsim' component = {SIMS.BallSim} />
+          <Route exact path = '/testsim' component = {SIMS.BlankTestSim} />
           <Route exact path = '/' component = {Home}/>
         </Switch>
   );
