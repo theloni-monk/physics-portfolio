@@ -5,6 +5,7 @@ export default abstract class GenericSim extends Component {
     protected renderTarget: HTMLDivElement
     protected G: PIXI.Graphics
     protected app: PIXI.Application
+    protected prevUpdateTime:number
 
     readonly fps:number = 60;
     
@@ -16,7 +17,8 @@ export default abstract class GenericSim extends Component {
         this.G = new PIXI.Graphics();
     }
 
-    initPIXI = (width:number, height:number, backgroundColor:number | 0x000000) =>{
+    initPIXI = (width:number, height:number, backgroundColor:number) =>{
+        //TODO: on resize reinit application and reassign this.G
         this.app = new PIXI.Application({
 			width: width,
 			height: height,
@@ -24,8 +26,9 @@ export default abstract class GenericSim extends Component {
 			antialias: true
 		});
 		this.renderTarget.appendChild(this.app.view);
-		this.app.start(); //start renderer;
-		this.app.stage.addChild(this.G);
+		this.app.start(); //start renderer internal update ticker;
+        this.app.stage.addChild(this.G);
+        this.prevUpdateTime = Date.now();
     }
 
     abstract handlePress(e:KeyboardEvent):void
@@ -34,6 +37,6 @@ export default abstract class GenericSim extends Component {
 
     abstract draw():void
 
-    abstract update(delta:number):void
+    abstract update():void
     abstract render():JSX.Element
 }

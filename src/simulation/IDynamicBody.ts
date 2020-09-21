@@ -5,4 +5,7 @@ export default interface DynamicBody{
     vel:Vector2,
     pos:Vector2
     update(deltaT:number):void
+    setPos(p:Vector2):void
+    setVel(v:Vector2):void
+    setAcc(a:Vector2):void
 }

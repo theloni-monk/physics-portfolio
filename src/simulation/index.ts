@@ -1,4 +1,4 @@
-import {BallSim} from './BallSim'
+import {BlankTestSim} from './BlankTestSim'
 export {
-    BallSim
+    BlankTestSim
 }
