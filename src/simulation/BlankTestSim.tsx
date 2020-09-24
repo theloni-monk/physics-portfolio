@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import * as PIXI from 'pixi.js'
+import React from 'react'
 import GenericSim from './GenericSim'
 
 interface iprops{
@@ -11,7 +10,13 @@ export class BlankTestSim extends GenericSim{
         super(props.title);
     }
     componentDidMount(){
-        this.initPIXI(window.innerWidth, window.innerHeight, 0);
+        this.screen = {
+            screenHeight:window.innerHeight, 
+            screenWidth:window.innerWidth,
+            startX: 0, endX: 15,
+            startY: 0, endY: 10
+        }
+        this.initPIXI(0);
         this.update()
     }
 

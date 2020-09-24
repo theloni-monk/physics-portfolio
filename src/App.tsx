@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react';
+import React,{useEffect} from 'react';
 import {Switch, Route} from 'react-router-dom';
 import * as SIMS from './simulation'
 import './css/App.css'
@@ -14,8 +14,9 @@ export const App = () => { //Functional Component
   //TODO: deploy base mvp to github pages
   return (
         <Switch>
-          <Route exact path = '/testsim' component = {SIMS.BlankTestSim} />
           <Route exact path = '/' component = {Home}/>
+          <Route exact path = '/testsim' component = {SIMS.BlankTestSim} />
+          <Route exact path = '/particlesim' component = {SIMS.BasicParticleSim} />
         </Switch>
   );
 }

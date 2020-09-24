@@ -1,11 +1,13 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import * as PIXI from 'pixi.js'
+import {screenBounds} from './IDrawable'
 
 export default abstract class GenericSim extends Component {
     protected renderTarget: HTMLDivElement
     protected G: PIXI.Graphics
     protected app: PIXI.Application
     protected prevUpdateTime:number
+    protected screen:screenBounds 
 
     readonly fps:number = 60;
     
@@ -17,11 +19,11 @@ export default abstract class GenericSim extends Component {
         this.G = new PIXI.Graphics();
     }
 
-    initPIXI = (width:number, height:number, backgroundColor:number) =>{
+    initPIXI = (backgroundColor:number) =>{
         //TODO: on resize reinit application and reassign this.G
         this.app = new PIXI.Application({
-			width: width,
-			height: height,
+			width: this.screen.screenWidth,
+			height: this.screen.screenHeight,
 			backgroundColor: backgroundColor,
 			antialias: true
 		});
@@ -33,7 +35,8 @@ export default abstract class GenericSim extends Component {
 
     abstract handlePress(e:KeyboardEvent):void
 
-    abstract componentDidMount():void //must call initPIXI
+    /** @note must create a screenBounds object and call initPIXI */
+    abstract componentDidMount():void 
 
     abstract draw():void
 
