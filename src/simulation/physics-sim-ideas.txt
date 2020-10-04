@@ -1,0 +1,14 @@
+ideas:
+2d:
+Elastic Collision
+Inelastic Collision
+Pegboard
+Pendulum
+Double Pendulum
+Universal gravitation
+Fluid sim
+
+3d:
+Marble board game 
+3-Body problem
+
