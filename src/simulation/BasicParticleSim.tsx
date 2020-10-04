@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{Component} from 'react'
 import * as PIXI from 'pixi.js'
 import GenericSim from './GenericSim'
 
@@ -6,6 +6,8 @@ import Drawable, {screenBounds} from './IDrawable'
 import DynamicBody from './IDynamicBody'
 import Vector2 from './utils/vect'
 
+import '../css/SimLayout.scss';
+import { Redirect } from 'react-router-dom'
 interface iparticle extends DynamicBody,Drawable{};
 
 class Particle implements iparticle{
@@ -53,10 +55,43 @@ class Particle implements iparticle{
 interface iprops{
     title: string
 }
-export default class BasicParticleSim extends GenericSim {
+interface istate{
+    goBack:boolean
+}
+export default class BasicParticleSim extends Component<iprops,istate> {
+    protected renderTarget: HTMLDivElement
+    protected G: PIXI.Graphics
+    protected app: PIXI.Application
+    protected prevUpdateTime:number
+    protected screen:screenBounds 
+
+    readonly fps:number = 60;
+    
+    protected title: string
+
     ball:Particle
+    
     constructor(props:iprops){
-        super(props.title);
+        super(props);
+        this.state = {
+            goBack:false
+        }
+        //this.title = props.title
+        this.G = new PIXI.Graphics();
+    }
+
+    initPIXI = (backgroundColor:number) =>{
+        //TODO: on resize reinit application and reassign this.G
+        this.app = new PIXI.Application({
+			width: this.screen.screenWidth,
+			height: this.screen.screenHeight,
+			backgroundColor: backgroundColor,
+			antialias: true
+		});
+		this.renderTarget.appendChild(this.app.view);
+		this.app.start(); //start renderer internal update ticker;
+        this.app.stage.addChild(this.G);
+        this.prevUpdateTime = Date.now();
     }
 
     componentDidMount(){
@@ -99,14 +134,20 @@ export default class BasicParticleSim extends GenericSim {
     }
 
     render() {
+        if(this.state.goBack) return <Redirect to = {{pathname:'/'}}/>
         let component = this;
 		document.addEventListener('keyup', (e) => { this.handlePress(e) });
 		return (
-			<div className="GameFrameWrapper">
-				<div ref={(thisDiv: HTMLDivElement) => { component.renderTarget = thisDiv }}
-					onMouseMove={(e) => {  }}
-				/>
-			</div>
-		); //
+            <div>
+                <div className="sim-sidebar" >
+                    <div className = "back-butt" onClick={(e)=>this.setState({goBack:true})}>back</div>
+                </div>
+                <div className="sim-content">
+                    <div ref={(thisDiv: HTMLDivElement) => { component.renderTarget = thisDiv }}
+                        onMouseMove={(e) => {  }}
+                    />
+                </div>
+            </div>
+		); // TODO: add sidebar with controls and option to return to home
     }
 }
