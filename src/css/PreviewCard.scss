@@ -1,0 +1,19 @@
+@import 'colors';
+.preview-card{
+ padding: 10px;
+ margin: 10px;
+ background-color: $mid-teal;
+ border-radius: 10px;
+ &:hover{ //TODO: animate
+     background-color: $mid-blue;
+     box-shadow: 4px 4px $mid-teal;
+ }
+ .card-title{
+    color: white;
+    font-size: 2em;
+ }
+ .card-descriptor{
+    font-size: 1.5em;
+    color:white;
+ }
+}

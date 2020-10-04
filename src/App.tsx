@@ -1,7 +1,6 @@
 import React,{useEffect} from 'react';
 import {Switch, Route} from 'react-router-dom';
 import * as SIMS from './simulation'
-import './css/App.css'
 
 import {Home} from './Home';
 
