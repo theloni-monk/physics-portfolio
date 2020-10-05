@@ -50,13 +50,16 @@ class Particle implements iparticle{
         this.g.drawCircle(pxPos.x, pxPos.y, 20); //20px size is totally arbitrary but will be fine for now
         this.g.endFill();
     }
+    
 }
 
 interface iprops{
     title: string
 }
 interface istate{
-    goBack:boolean
+    goBack:boolean,
+    paused:boolean,
+    dampingLevel: string //due to input
 }
 export default class BasicParticleSim extends Component<iprops,istate> {
     protected renderTarget: HTMLDivElement
@@ -64,17 +67,21 @@ export default class BasicParticleSim extends Component<iprops,istate> {
     protected app: PIXI.Application
     protected prevUpdateTime:number
     protected screen:screenBounds 
+    protected timeoutPtr: any //weird js pointer type
 
     readonly fps:number = 60;
-    
+
     protected title: string
 
+    /**UNIQUE SIM VARIABLES */
     ball:Particle
-    
+
     constructor(props:iprops){
         super(props);
         this.state = {
-            goBack:false
+            goBack:false,
+            paused:false,
+            dampingLevel: '1'
         }
         //this.title = props.title
         this.G = new PIXI.Graphics();
@@ -82,27 +89,33 @@ export default class BasicParticleSim extends Component<iprops,istate> {
 
     initPIXI = (backgroundColor:number) =>{
         //TODO: on resize reinit application and reassign this.G
+        //FIXME: get accurate canvas size from dom
         this.app = new PIXI.Application({
-			width: this.screen.screenWidth,
-			height: this.screen.screenHeight,
+			width: window.innerWidth ,//this.screen.screenWidth,
+			height: window.innerHeight, // this.screen.screenHeight,
 			backgroundColor: backgroundColor,
 			antialias: true
 		});
 		this.renderTarget.appendChild(this.app.view);
 		this.app.start(); //start renderer internal update ticker;
         this.app.stage.addChild(this.G);
-        this.prevUpdateTime = Date.now();
     }
 
     componentDidMount(){
+        console.log(this.renderTarget.getBoundingClientRect())
         this.screen = {
-            screenHeight:window.innerHeight, 
-            screenWidth:window.innerWidth,
-            startX: 0, endX: 10,
-            startY: 0, endY: 3
+            screenWidth: (window.innerWidth), //this.renderTarget.getBoundingClientRect().width,
+            screenHeight: window.innerHeight, //this.renderTarget.getBoundingClientRect().height, 
+            startX: 0, endX: 15,
+            startY: 0, endY: 10
         }
         this.initPIXI(0); //black background
-        
+        this.initSim()
+    }
+
+    initSim(){
+        if(this.timeoutPtr) clearTimeout(this.timeoutPtr);
+        if(this.ball) this.ball.g.clear();
         this.ball = new Particle(
             new Vector2(2,0), // pos (5,0)
             new Vector2(3,7), // 3m/s horizontal 7m/s upward initial velocity
@@ -117,16 +130,24 @@ export default class BasicParticleSim extends Component<iprops,istate> {
     }
 
     update = () =>{
+        if(this.state.paused) {this.prevUpdateTime = Date.now(); return}
+        if(!this.prevUpdateTime) this.prevUpdateTime = Date.now();
         let deltaT = (Date.now() - this.prevUpdateTime)/1000
+        /**UPDATE LOGIC */
         this.ball.update(deltaT);
-        //constrain ball to window bounds
-        if(this.ball.pos.y<this.screen.startY || this.ball.pos.y > this.screen.endY || this.ball.pos.x<this.screen.startX || this.ball.pos.x > this.screen.endX){
+        //constrain ball to window bounds in X
+        if(this.ball.pos.x<this.screen.startX || this.ball.pos.x > this.screen.endX){
             this.ball.setAcc(new Vector2(0,0));
             this.ball.setVel(new Vector2(0,0));
         }
+        if(this.ball.pos.y<this.screen.startY){
+            this.ball.setPos(new Vector2(this.ball.pos.x, this.screen.startY)) // avoid double collision registration
+            this.ball.setVel(new Vector2(this.ball.vel.x,-this.ball.vel.y* Number(this.state.dampingLevel))); // bounce off of floor
+        }
+
         this.draw();
         this.prevUpdateTime = Date.now();
-        setTimeout(this.update, 16.66); //~60fps
+        this.timeoutPtr = setTimeout(this.update, 16.66); //~60fps
     }
 
     handlePress = (e:KeyboardEvent) => {
@@ -138,16 +159,25 @@ export default class BasicParticleSim extends Component<iprops,istate> {
         let component = this;
 		document.addEventListener('keyup', (e) => { this.handlePress(e) });
 		return (
-            <div>
+            <div className ="sim-wrapper">
+                <div className = "sim-header">Basic Bouncing Ball</div>
                 <div className="sim-sidebar" >
                     <div className = "back-butt" onClick={(e)=>this.setState({goBack:true})}>back</div>
+                    <div className = "pause-butt" onClick = {(e)=>this.setState({paused:!this.state.paused})}>{!this.state.paused?'pause':'unpause'}</div>
+                    <div className = "restart-butt" onClick = {(e)=>this.initSim()}>restart</div>
+                    {/** this is where you place any misc inputs to your sim and bind them to state*/}
+                    <div className = "num-input">
+                        <em>damping level:</em>
+                        <input value = {this.state.dampingLevel}
+                        onChange = {(evt)=>this.setState({dampingLevel: evt.target.value})} />
+                        </div>
                 </div>
-                <div className="sim-content">
-                    <div ref={(thisDiv: HTMLDivElement) => { component.renderTarget = thisDiv }}
+                <div className = "sim-content" ref={(thisDiv: HTMLDivElement) => { component.renderTarget = thisDiv }}
                         onMouseMove={(e) => {  }}
                     />
-                </div>
+                <div className = "sim-footer">written by theo cooper</div>
+                
             </div>
-		); // TODO: add sidebar with controls and option to return to home
+		);
     }
 }

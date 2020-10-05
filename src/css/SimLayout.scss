@@ -1,6 +1,39 @@
-.sim-sidebar{
-    width:25%
+@import 'colors';
+
+.sim-header {
+    grid-area: header;
+    text-align: center;
+    background-color: $bg;
+    font-size: 4em;
+    padding:0.5em;
+    color:white;
 }
-.sim-content{
-    margin-left:25%
+
+.sim-sidebar {
+    grid-area: sidebar;
+    text-align: center;
+    background-color: $mid-teal;
+    padding-left: 0.5em;
+    padding-right: 5em;
+    color:white;
+}
+
+.sim-content {
+    grid-area: main
+}
+
+.sim-footer {
+    grid-area: footer;
+    text-align: center;
+    background-color: $bg;
+    color: white;
+}
+
+.sim-wrapper {
+    display: grid;
+    grid-template-areas:
+        'header header header header header header'
+        'sidebar main main main main main'
+        'sidebar footer footer footer footer footer';
+    ;
 }
