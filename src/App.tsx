@@ -16,6 +16,7 @@ export const App = () => { //Functional Component
           <Route exact path = '/' component = {Home}/>
           <Route exact path = '/testsim' component = {SIMS.BlankTestSim} />
           <Route exact path = '/particlesim' component = {SIMS.BasicParticleSim} />
+          <Route exact path = '/orbitsim' component = {SIMS.OrbitSim} />
         </Switch>
   );
 }

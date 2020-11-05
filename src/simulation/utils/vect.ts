@@ -11,11 +11,17 @@ export default class Vector2 {
     static fromPolar = (r: number, theta: number): Vector2 => new Vector2(r * Math.cos(theta), r * Math.sin(theta))
 
 
+    toString = ():string => 'x: ' + this.x.toString() + ', y: ' + this.y.toString()
+
     length = (): number => Math.sqrt(this.x * this.x + (this.y * this.y))
+
+    isZero = (): boolean => this.length()<0.00001
 
     radians = (): number => Math.atan2(this.y, this.x)
 
     congugate = (): Vector2 => new Vector2(this.x, -this.y)
+
+    norm = (): Vector2 => this.multScalar(1/this.length())
 
 
     inv = (): Vector2 => new Vector2(-this.x, -this.y)

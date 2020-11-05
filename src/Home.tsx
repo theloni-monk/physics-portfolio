@@ -16,6 +16,8 @@ export const Home = () => {
             <div className='card-container'>
                 <PreviewCard link = '/testsim' preview_img = {testimg} title = 'Basic blank render with a circle' description = 'Purely for testing purposes.'/>
                 <PreviewCard link = '/particlesim' preview_img = {testimg} title = '2d particle motion' description = 'demonstrates kinematic equations'/>
+                <PreviewCard link = '/orbitsim' preview_img = {testimg} title = '2d orbit' description = 'demonstrates universal gravitation'/>
+           
             </div>
         </div>
     );
