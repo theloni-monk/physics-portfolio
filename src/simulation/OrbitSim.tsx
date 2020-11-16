@@ -61,7 +61,7 @@ class GravBody implements igrav{
         let pxPos:Vector2 = this.posToPx(sb);
         // Circle
         this.g.lineStyle(0); //lineStyle to zero so the circle doesn't have an outline
-        this.g.beginFill(0x000000, 1);
+        this.g.beginFill(0x838B8B, 1);
         this.g.drawEllipse(pxPos.x, pxPos.y, BODY_RAD / scalew(sb.screenWidth), BODY_RAD / scaleh(sb.screenHeight)); //20px size is totally arbitrary but will be fine for now
         this.g.endFill();
     }
@@ -125,7 +125,7 @@ export default class BasicParticleSim extends Component<iprops,istate> {
             startY: COORDSPACE[2], endY: COORDSPACE[3]
         }
         console.log(scalew(this.screen.screenWidth), scaleh(this.screen.screenHeight))
-        this.initPIXI(0xAFAFAF); //white background
+        this.initPIXI(0x0F0F0F); //white background
         this.initSim()
     }
 
@@ -148,14 +148,18 @@ export default class BasicParticleSim extends Component<iprops,istate> {
         //draw planet
         this.G.clear();
         this.G.lineStyle(0); //lineStyle to zero so the circle doesn't have an outline
-        this.G.beginFill(0xDE3249, 1);
+        this.G.beginFill(0x50A6C2, 1);
         this.G.drawEllipse(this.screen.screenWidth/2, this.screen.screenHeight/2, PLANET_RAD / scalew(this.screen.screenWidth), PLANET_RAD / scaleh(this.screen.screenHeight));
         this.G.endFill();
         this.ball.draw(this.screen);
     }
 
     update = () =>{
-        if(this.state.paused) {this.prevUpdateTime = Date.now(); return}
+        if(this.state.paused) {
+            this.prevUpdateTime = Date.now(); 
+            this.timeoutPtr = setTimeout(this.update, 16.66); //~60fps
+            return;
+        }
         if(!this.prevUpdateTime) this.prevUpdateTime = Date.now();
         let deltaT = (Date.now() - this.prevUpdateTime)/1000;
         
@@ -213,7 +217,7 @@ export default class BasicParticleSim extends Component<iprops,istate> {
                     <div className = "num-input">
                         <em>Initial rightward velocity: (km/s)</em>
                         {/**TODO: make custom input component */}
-                       1<input className = "slider" type="range" min="1" max="5" value={this.state.rVel} onChange={(v)=>this.setState({rVel: v.target.value})}/>5
+                       1<input className = "slider" type="range" min="1" max="50" value={String(Number(this.state.rVel)*10)} onChange={(v)=>this.setState({rVel: String(Number(v.target.value)/10)})}/>5
                     </div>
                     
                 </div>
