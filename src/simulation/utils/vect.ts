@@ -10,6 +10,7 @@ export default class Vector2 {
 
     static fromPolar = (r: number, theta: number): Vector2 => new Vector2(r * Math.cos(theta), r * Math.sin(theta))
 
+    copy = ():Vector2 => new Vector2(this.x, this.y)
 
     toString = ():string => 'x: ' + this.x.toString() + ', y: ' + this.y.toString()
 
