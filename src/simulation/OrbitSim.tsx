@@ -1,6 +1,5 @@
 import React,{Component} from 'react'
 import * as PIXI from 'pixi.js'
-import GenericSim from './GenericSim'
 //TODO organize all this code
 import Drawable, {screenBounds} from './IDrawable'
 import DynamicBody from './IDynamicBody'
@@ -13,7 +12,7 @@ const COORDSPACE = [-15, 15, -10, 10] // km
 //what one px corresponds to
 const scalew = (width:number): number => (COORDSPACE[1] - COORDSPACE[0]) / width;
 const scaleh = (height:number): number => (COORDSPACE[3] - COORDSPACE[2]) / height;
-        
+
 
 const PLANET_RAD = 3.1855 //km
 const BODY_RAD = 0.5 //km(idk)
@@ -22,7 +21,7 @@ const ESCAPE_VEL =  3.1 //km/s
 const GRAV_CONST = 0.0000000000066 
 
 /**UNIQUE ACTOR */
-interface igrav extends DynamicBody, Drawable{};
+interface igrav extends DynamicBody, Drawable{}
 class GravBody implements igrav{
     pos:Vector2 
     vel:Vector2 
