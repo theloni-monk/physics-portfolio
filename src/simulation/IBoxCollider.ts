@@ -21,7 +21,6 @@ export class BoundingBox{
         return true
     }
 }
-//WRITEME: circle collider
 /**@note it is very important that if a body implements both BoxCollider and Drawable, that its bounding box is alligned to its visualization */
 export interface BoxCollider{
     getBounds():BoundingBox

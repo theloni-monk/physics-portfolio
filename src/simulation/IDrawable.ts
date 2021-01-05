@@ -1,5 +1,9 @@
 import * as PIXI from 'pixi.js';
 import Vector2 from './utils/vect'
+
+export const scalew = (width:number, sb:screenBounds): number => (sb.endX - sb.startX) / width;
+export const scaleh = (height:number, sb:screenBounds): number => (sb.endY - sb.startY) / height;
+
 export interface screenBounds{
     screenWidth:number 
     screenHeight:number 
