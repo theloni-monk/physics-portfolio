@@ -181,7 +181,7 @@ export default class BasicParticleSim extends Component<iprops,istate> {
             this.ball.setVel(new Vector2(0,0));
         }
         //stop on coll with planet
-        if(r.length() < PLANET_RAD){
+        if(r.length() < PLANET_RAD + BODY_RAD){
             //console.log('ball stopped on collision with planet')
             this.ball.setAcc(new Vector2(0,0));
             this.ball.setVel(new Vector2(0,0));
