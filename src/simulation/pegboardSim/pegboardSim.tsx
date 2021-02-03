@@ -120,7 +120,8 @@ export default class pegboardSim extends Component<{},iState>{
                     <div className = "pause-butt" onClick = {(e)=>this.setState({paused:!this.state.paused})}>{!this.state.paused?'pause':'unpause'}</div>
                     <div className = "restart-butt" onClick = {(e)=>this.initSim()}>restart</div>
                      
-                    {/** this is where you place any misc inputs to your sim and bind them to state*/}
+                    {/** TODO: overlay sidebar on renderframe and make opaque on hover 
+                     * this is where you place any misc inputs to your sim and bind them to state*/}
                     
                     <div className = "num-input">
                         </div>
