@@ -2,7 +2,7 @@ import Vector2 from '../utils/vect'
 import DynamicBody from '../IDynamicBody'
 import CircleCollider from '../ICircleCollider'
 import Drawable, { screenBounds, scaleh, scalew} from '../IDrawable'
-
+import * as PIXI from 'pixi.js'
 const COLOR = 0xFF0000
 
 export default class BallColliderObject implements DynamicBody, CircleCollider, Drawable{

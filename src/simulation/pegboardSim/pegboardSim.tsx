@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import Pegboard from './ParticleSystem'
+import * as PIXI from 'pixi.js'
 import Vector2 from '../utils/vect'
 import {screenBounds,scaleh,scalew} from '../IDrawable'
 
-import '../css/SimLayout.scss';
+import '../../css/SimLayout.scss';
 /**
  * CONSTANTS
  */
-const COORDSPACE = [-15, 15, -10, 10] 
+const COORDSPACE = [-15, 15, -20, 0] 
 
 interface iState {
     paused:boolean,
@@ -23,7 +24,7 @@ export default class pegboardSim extends Component<{},iState>{
     protected timeoutPtr: any //weird js pointer type
     readonly fps:number = 60;
     protected title: string
-    
+
     board: Pegboard;
 
     constructor(props:any){
@@ -34,6 +35,7 @@ export default class pegboardSim extends Component<{},iState>{
         }
         //this.title = props.title
         this.G = new PIXI.Graphics();
+        
     }
 
     initPIXI = (backgroundColor:number) =>{
@@ -48,6 +50,7 @@ export default class pegboardSim extends Component<{},iState>{
 		this.renderTarget.appendChild(this.app.view);
 		this.app.start(); //start renderer internal update ticker;
         this.app.stage.addChild(this.G);
+        this.board = new Pegboard(this.app.stage,0);
     }
 
     componentDidMount(){
@@ -58,6 +61,7 @@ export default class pegboardSim extends Component<{},iState>{
             startX: COORDSPACE[0], endX: COORDSPACE[1],
             startY: COORDSPACE[2], endY: COORDSPACE[3]
         }
+        
         console.log(this.screen.screenWidth, this.screen.screenHeight)
         this.initPIXI(0x0F0F0F); //white background
         this.initSim();
@@ -67,17 +71,16 @@ export default class pegboardSim extends Component<{},iState>{
         console.log('initsim called')
         if(this.timeoutPtr) clearTimeout(this.timeoutPtr);
         if(this.board) this.G.clear();
-        this.board = new Pegboard(
-        );
+        
         this.app.stage.addChild(this.G);
         this.update();
     }
 
     draw = () =>{
-        //draw planet
         this.G.clear();
         this.G.lineStyle(0); //lineStyle to zero so the circle doesn't have an outline
         this.G.beginFill(0x50A6C2, 1);
+        this.board.draw(this.screen);
         //WRITEME: write draw logic from board
         this.G.endFill();
     }
@@ -105,7 +108,7 @@ export default class pegboardSim extends Component<{},iState>{
     }
 
     handlePress = (e:KeyboardEvent) => {
-
+        if(e.ctrlKey) this.board.spawnBall();
     }
  
     render() {
@@ -114,18 +117,20 @@ export default class pegboardSim extends Component<{},iState>{
 		document.addEventListener('keyup', (e) => { this.handlePress(e) });
 		return (
             <div className ="sim-wrapper">
-                <div className = "sim-header">Orbit Simulation</div>
+                <div className = "sim-header">Pegboard Simulation</div>
+                {/** 
                 <div className="sim-sidebar" >
                     <div className = "back-butt" onClick={(e)=>this.setState({goBack:true})}>back</div>
                     <div className = "pause-butt" onClick = {(e)=>this.setState({paused:!this.state.paused})}>{!this.state.paused?'pause':'unpause'}</div>
                     <div className = "restart-butt" onClick = {(e)=>this.initSim()}>restart</div>
                      
-                    {/** this is where you place any misc inputs to your sim and bind them to state*/}
+                    /** this is where you place any misc inputs to your sim and bind them to state
                     
                     <div className = "num-input">
                         </div>
                     
-                </div>
+                </div> 
+                */}
                 <div className = "sim-content" ref={(thisDiv: HTMLDivElement) => { component.renderTarget = thisDiv }}
                         onMouseMove={(e) => {  }}
                     />

@@ -2,35 +2,50 @@ import CircleCollider from '../ICircleCollider';
 import BallColliderObject from './BallCollider';
 import PegColliderObject from './PegCollider';
 import Vector2 from '../utils/vect';
-
+import { screenBounds } from '../IDrawable';
+import * as PIXI from 'pixi.js'
 
 const MIN_VEL = 0.0001;
-const PEG_RAD = 0.5;
+const PEG_RAD = 0.2;
 const BALL_RAD = 0.2;
 const BALL_START_POS = new Vector2(0,0);
 
 
 const PEG_LOCS:Vector2[] = [
     // WRITEME: location of pegs
+new Vector2(0,-5)
 ];
 
 export default class Pegboard{
     friction:number
-    
+    stage:PIXI.Container
+
     pegs:PegColliderObject[]
     balls:BallColliderObject[]
     allAtRest:boolean
 
-    Pegboard(friction_:number) {
+    constructor(stage: PIXI.Container, friction_:number) {
         this.friction = friction_;
+        this.stage = stage;
+        this.pegs = new Array();
+        this.balls = new Array();
         // ball number = -1 : the cue ball
-        for (let i = -1; i < 15; i++) {
-            this.pegs.push(new PegColliderObject(PEG_LOCS[i], PEG_RAD));
-        }
+        PEG_LOCS.forEach(peg=>
+            this.pegs.push(new PegColliderObject(peg, PEG_RAD)))
+        
+        this.pegs.forEach(peg=>this.stage.addChild(peg.g))
+
         this.allAtRest = false;
+        
+    }
+    
+    draw = (sb:screenBounds) =>{
+        this.pegs.forEach(peg=>peg.draw(sb));
+        this.balls.forEach(ball=>ball.draw(sb));
     }
 
     step = (deltaT: number) => {
+        if(!this.balls) {return;}
         let ballsAtRest = 0;
         this.balls.forEach(ball => {if(!ball.atRest){
     
@@ -48,6 +63,7 @@ export default class Pegboard{
 
     spawnBall = () =>{
         this.balls.push(new BallColliderObject(BALL_START_POS,BALL_RAD));
+        this.stage.addChild(this.balls[this.balls.length-1].g);
     }
 
     checkEdge(ball: CircleCollider) {
