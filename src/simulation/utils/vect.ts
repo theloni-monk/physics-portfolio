@@ -12,7 +12,7 @@ export default class Vector2 {
 
     copy = ():Vector2 => new Vector2(this.x, this.y)
 
-    toString = ():string => 'x: ' + this.x.toString() + ', y: ' + this.y.toString()
+    toString = ():string => '<x: ' + this.x.toString() + ', y: ' + this.y.toString()+'>'
 
     length = (): number => Math.sqrt(this.x * this.x + (this.y * this.y))
 

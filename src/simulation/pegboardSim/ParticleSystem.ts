@@ -51,8 +51,9 @@ export default class Pegboard{
     
             ball.update(deltaT);
             
+            this.pegs.forEach(peg => {if(ball.isOverlapping(peg)) this.doCollision(ball, peg)});
+
             this.checkEdge(ball);
-            this.pegs.forEach(peg => {if(ball.isOverlapping(peg)) this.doCollision(ball, peg)})
             // check to see if all balls are at rest
             if (ball.atRest)
                 ballsAtRest++;
@@ -134,14 +135,14 @@ export default class Pegboard{
             new Vector2(cosine * bTemp[1].x - sine * bTemp[1].y, cosine * bTemp[1].y + sine * bTemp[1].x)];
 
             // update ball to screen pos
-            ball.pos = ball.pos.add(bFinal[0]);
+            ball.setPos(ball.pos.add(bFinal[0]));
 
             // update velocities
-            ball.vel = new Vector2(cosine * vFinal[0].x - sine * vFinal[0].y, cosine * vFinal[0].y + sine * vFinal[0].x);
+            ball.setVel(new Vector2(cosine * vFinal[0].x - sine * vFinal[0].y, cosine * vFinal[0].y + sine * vFinal[0].x));
             
             //check if velocities are low enough to set the balls to rest
             if(ball.vel.length() < MIN_VEL) {
-                ball.vel = new Vector2(0,0);
+                ball.setVel(new Vector2(0,0));
                 ball.atRest = true;
             }
         }
