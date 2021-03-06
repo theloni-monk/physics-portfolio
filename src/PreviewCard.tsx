@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Route, Redirect } from "react-router-dom";
 
-import './css/PreviewCard.scss'
 
 interface iprops{
     link: string,
@@ -22,10 +21,12 @@ export default class PreviewCard extends Component<iprops,istate> {
     render() {
         //fuxk it write the hover css later stop being a dumbass
         if(this.state.isClicked) return <Redirect to = {{pathname: this.props.link}} />
+        //TODO: add preview
         return (
-            <div className='preview-card' onClick={(e) => this.setState({isClicked:true})}>
-                <div className = 'card-title'>{this.props.title}</div>
-                <div className= 'card-descriptor'><em>{this.props.description}</em></div>
+            <div className='rounded-lg bg-purple-800 p-4 w-36 text-white m-3' onClick={(e) => this.setState({isClicked:true})}>
+                <div className = 'hover:underline'>{this.props.title}</div>
+                <div className= 'text-center text-blue-400'>{this.props.description}</div>
+            
             </div>
         );
     }
