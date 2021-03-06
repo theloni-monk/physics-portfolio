@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
-import Pegboard from './ParticleSystem'
+import Pegboard from './Pegboard'
 import * as PIXI from 'pixi.js'
-import Vector2 from '../utils/vect'
-import {screenBounds,scaleh,scalew} from '../IDrawable'
+import {screenBounds} from '../IDrawable'
 
-import '../../css/SimLayout.scss';
 /**
  * CONSTANTS
  */
@@ -118,19 +116,17 @@ export default class pegboardSim extends Component<{},iState>{
 		return (
             <div className ="sim-wrapper">
                 <div className = "sim-header">Pegboard Simulation</div>
-                {/** 
+                
                 <div className="sim-sidebar" >
                     <div className = "back-butt" onClick={(e)=>this.setState({goBack:true})}>back</div>
                     <div className = "pause-butt" onClick = {(e)=>this.setState({paused:!this.state.paused})}>{!this.state.paused?'pause':'unpause'}</div>
                     <div className = "restart-butt" onClick = {(e)=>this.initSim()}>restart</div>
                      
-                    /** this is where you place any misc inputs to your sim and bind them to state
+                    {/** this is where you place any misc inputs to your sim and bind them to state*/}
                     
-                    <div className = "num-input">
-                        </div>
                     
                 </div> 
-                */}
+                
                 <div className = "sim-content" ref={(thisDiv: HTMLDivElement) => { component.renderTarget = thisDiv }}
                         onMouseMove={(e) => {  }}
                     />

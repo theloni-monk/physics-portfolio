@@ -6,6 +6,7 @@ import { screenBounds } from '../IDrawable';
 import * as PIXI from 'pixi.js'
 
 const MIN_VEL = 0.0001;
+const VEL_NOISE_MAX = 0.01;
 const PEG_RAD = 0.2;
 const BALL_RAD = 0.2;
 const BALL_START_POS = new Vector2(0,0);
@@ -36,7 +37,6 @@ export default class Pegboard{
         this.pegs.forEach(peg=>this.stage.addChild(peg.g))
 
         this.allAtRest = false;
-        
     }
     
     draw = (sb:screenBounds) =>{
@@ -45,7 +45,7 @@ export default class Pegboard{
     }
 
     step = (deltaT: number) => {
-        if(!this.balls) {return;}
+        if(this.balls.length === 0) {return;}
         let ballsAtRest = 0;
         this.balls.forEach(ball => {if(!ball.atRest){
     
@@ -82,10 +82,10 @@ export default class Pegboard{
         let minDistance = ball.radius + peg.radius;
 
         if (distanceVectMag < minDistance) {
-            let distanceCorrection = (minDistance - distanceVectMag) / 2.0;
+            //let distanceCorrection = (minDistance - distanceVectMag) / 2.0;
             let d = distanceVect.copy();
-            let correctionVector = d.norm().multScalar(distanceCorrection);
-            ball.pos = ball.pos.sub(correctionVector);
+            let correctionVector = d.norm().multScalar(minDistance+0.01);
+            ball.pos = ball.pos.add(correctionVector);
 
             // get angle of distanceVect
             let theta = distanceVect.radians();
@@ -140,6 +140,10 @@ export default class Pegboard{
             // update velocities
             ball.setVel(new Vector2(cosine * vFinal[0].x - sine * vFinal[0].y, cosine * vFinal[0].y + sine * vFinal[0].x));
             
+            // prevent head on collision from resulting in perfect up and down bouncing
+            let velNoiseVect: Vector2 = new Vector2(Math.random()*VEL_NOISE_MAX,Math.random()*VEL_NOISE_MAX);
+            ball.setVel(ball.vel.add(velNoiseVect));
+
             //check if velocities are low enough to set the balls to rest
             if(ball.vel.length() < MIN_VEL) {
                 ball.setVel(new Vector2(0,0));

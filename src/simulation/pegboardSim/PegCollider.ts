@@ -17,6 +17,7 @@ export default class PegColliderObject implements CircleCollider, Drawable{
     constructor(p:Vector2, rad:number){
         this.pos = p;
         this.radius = rad;
+        this.mass = 1;
 
         this.g = new PIXI.Graphics();
     }
