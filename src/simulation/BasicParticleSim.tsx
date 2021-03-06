@@ -6,7 +6,6 @@ import Drawable, {screenBounds} from './IDrawable'
 import DynamicBody from './IDynamicBody'
 import Vector2 from './utils/vect'
 
-import '../css/SimLayout.scss';
 import { Redirect } from 'react-router-dom'
 interface iparticle extends DynamicBody,Drawable{};
 
