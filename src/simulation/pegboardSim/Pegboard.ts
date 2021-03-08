@@ -19,7 +19,7 @@ const PEG_LOCS: Vector2[] = [
     new Vector2(-0.8, 0.2), new Vector2(-0.6, 0.2), new Vector2(-0.4, 0.2), new Vector2(-0.2, 0.2), new Vector2(0, 0.2),new Vector2(0.8, 0.2), new Vector2(0.6, 0.2), new Vector2(0.4, 0.2), new Vector2(0.2, 0.2),
     new Vector2(-0.9, 0.3), new Vector2(-0.7, 0.3), new Vector2(-0.5, 0.3), new Vector2(-0.3, 0.3), new Vector2(-0.1, 0.3),new Vector2(0.7, 0.3), new Vector2(0.5, 0.3), new Vector2(0.3, 0.3), new Vector2(0.1, 0.3),
     new Vector2(-0.8, 0.4), new Vector2(-0.6, 0.4), new Vector2(-0.4, 0.4), new Vector2(-0.2, 0.4), new Vector2(0, 0.4),new Vector2(0.8, 0.4), new Vector2(0.6, 0.4), new Vector2(0.4, 0.4), new Vector2(0.2, 0.4),
-    new Vector2(-0.9, 0.5), new Vector2(-0.7, 0.5), new Vector2(-0.5, 0.5), new Vector2(-0.3, 0.5), new Vector2(-0.1, 0.5),new Vector2(0.7, 0.5), new Vector2(0.5, 0.5), new Vector2(0.3, 0.3), new Vector2(0.1, 0.5)
+    new Vector2(-0.9, 0.5), new Vector2(-0.7, 0.5), new Vector2(-0.5, 0.5), new Vector2(-0.3, 0.5), new Vector2(-0.1, 0.5),new Vector2(0.7, 0.5), new Vector2(0.5, 0.5), new Vector2(0.3, 0.5), new Vector2(0.1, 0.5)
 ];
 
 export default class Pegboard {
@@ -56,8 +56,8 @@ export default class Pegboard {
     }
 
     step = (deltaT: number) => {
-        console.log('deltat', deltaT);
-        if (this.balls.length === 0) { return; }
+        //console.log('deltat', deltaT);
+        if (this.balls.length === 0) { return;}
         let ballsAtRest = 0;
         let rindex = 0;//jank asf method of checking balls against each other by refrence without duplicates
         this.balls.forEach(ball => {
@@ -188,7 +188,7 @@ export default class Pegboard {
             ball.setVel(Vector2.fromPolar(ball.vel.length(), theta));
 
             // prevent head on collision from resulting in perfect up and down bouncing
-            let velNoiseVect: Vector2 = new Vector2(Math.random() * VEL_NOISE_MAX, Math.abs(Math.random() * VEL_NOISE_MAX));
+            let velNoiseVect: Vector2 = new Vector2((Math.random()-0.5) * VEL_NOISE_MAX, Math.abs(Math.random() * VEL_NOISE_MAX));
             ball.setVel(ball.vel.add(velNoiseVect).multScalar(BP_RESTITUTION));
 
             //check if velocities are low enough to set the ball to rest
