@@ -3,7 +3,7 @@ import DynamicBody from '../IDynamicBody'
 import CircleCollider from '../ICircleCollider'
 import Drawable, { screenBounds, scaleh, scalew} from '../IDrawable'
 import * as PIXI from 'pixi.js'
-const COLOR = 0xFF0000
+const COLOR = 0xFA0A0B
 
 export default class BallColliderObject implements DynamicBody, CircleCollider, Drawable{
     //NOTE: must add each g to app.stage

@@ -68,7 +68,7 @@ export default class pegboardSim extends Component<{}, iState>{
         }
 
         console.log(this.screen.screenWidth, this.screen.screenHeight)
-        this.initPIXI(0x0F0F0F); //white background
+        this.initPIXI(0x997950); //wood background
         this.initSim();
     }
 

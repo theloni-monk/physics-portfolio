@@ -2,7 +2,7 @@ import Vector2 from '../utils/vect'
 import CircleCollider from '../ICircleCollider'
 import Drawable,{screenBounds, scaleh, scalew} from '../IDrawable'
 import * as PIXI from 'pixi.js'
-const COLOR = 0xFFFFFF;
+const COLOR = 0xF8F8FF;
 export default class PegColliderObject implements CircleCollider, Drawable{
     pos: Vector2
     vel: Vector2 = new Vector2(0,0)
