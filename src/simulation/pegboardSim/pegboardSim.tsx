@@ -8,6 +8,7 @@ import { screenBounds } from '../IDrawable'
  * CONSTANTS
  */
 const BOARDLEN = 20;
+const updateTicker = new PIXI.Ticker();
 interface iState {
     paused: boolean,
     goBack: boolean
@@ -19,7 +20,7 @@ export default class pegboardSim extends Component<{}, iState>{
     protected prevUpdateTime: number
     protected screen: screenBounds
     protected timeoutPtr: any //weird js pointer type
-    readonly fps: number = 120;
+    readonly fps: number = 244;
     protected title: string
 
     board: Pegboard;
@@ -32,7 +33,7 @@ export default class pegboardSim extends Component<{}, iState>{
         }
         //this.title = props.title
         this.G = new PIXI.Graphics();
-
+        updateTicker.autoStart = true;
     }
 
     initPIXI = (backgroundColor: number) => {
@@ -50,6 +51,14 @@ export default class pegboardSim extends Component<{}, iState>{
         this.board = new Pegboard(this.app.stage, [this.screen.startX,this.screen.endX], [this.screen.startY, this.screen.endY]);
     }
 
+    initSim = () => {
+        console.log('initsim called')
+        if (this.timeoutPtr) clearTimeout(this.timeoutPtr);
+        if (this.board) this.G.clear();
+
+        this.app.stage.addChild(this.G);
+        updateTicker.add(deltaT=>this.update(deltaT/70));
+    }
     componentDidMount() {
         console.log(this.renderTarget.getBoundingClientRect())
         let sw = document.getElementById('sim')?.clientWidth;
@@ -72,50 +81,30 @@ export default class pegboardSim extends Component<{}, iState>{
         this.initSim();
     }
 
-    initSim() {
-        console.log('initsim called')
-        if (this.timeoutPtr) clearTimeout(this.timeoutPtr);
-        if (this.board) this.G.clear();
-
-        this.app.stage.addChild(this.G);
-        this.update();
-    }
+    
 
     draw = () => {
         this.G.clear();
-        this.G.lineStyle(0); //lineStyle to zero so the circle doesn't have an outline
-        this.G.beginFill(0x50A6C2, 1);
+        this.G.beginFill(0);
         this.board.draw(this.screen);
-        //WRITEME: write draw logic from board
         this.G.endFill();
     }
 
-    update = () => {
-        if (this.state.paused) {
-            this.prevUpdateTime = Date.now();
-            this.timeoutPtr = setTimeout(this.update, 16.66); //~60fps
-            return;
-        }
-        if (!this.prevUpdateTime) this.prevUpdateTime = Date.now();
-        let deltaT = (Date.now() - this.prevUpdateTime) / 1000;
-
-
+    update = (deltaT: number) => {
+        if (this.state.paused) return;
+        
         /**UPDATE LOGIC */
 
         //update vel, pos
         this.board.step(deltaT);
         this.draw();
-
-        this.prevUpdateTime = Date.now();
-        this.timeoutPtr = setTimeout(this.update, 1000 / this.fps); //~60fps
-        return;
     }
 
     debounced = true;
     handlePress = (e: KeyboardEvent) => {
         if (e.code === 'Space' && this.debounced) {
-
-            this.board.spawnBall(); this.debounced = false;
+            this.board.spawnBall(); 
+            this.debounced = false;
         }
 
         setTimeout(() => { this.debounced = true }, 250);
