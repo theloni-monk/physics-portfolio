@@ -11,12 +11,15 @@ const PEG_RAD = 0.2;
 const BALL_RAD = 0.2;
 const BALL_START_POS = new Vector2(0, -BALL_RAD - 0.001);
 const BB_RESTITUTION = 0.8; //what factor of kinetic energy is preserved in ball-ball collision, aka  how bouncy balls are with each other
-const BP_RESTITUTION = 0.9; //what factor of kinetic energy is preserved in ball-peg collision, aka  how bouncy balls are with pegs
+const BP_RESTITUTION = 0.7; //what factor of kinetic energy is preserved in ball-peg collision, aka  how bouncy balls are with pegs
 
 
 //locations are percentages down the field in x and y
 const PEG_LOCS: Vector2[] = [
-    new Vector2(0, 0.5)
+    new Vector2(-0.8, 0.2), new Vector2(-0.6, 0.2), new Vector2(-0.4, 0.2), new Vector2(-0.2, 0.2), new Vector2(0, 0.2),new Vector2(0.8, 0.2), new Vector2(0.6, 0.2), new Vector2(0.4, 0.2), new Vector2(0.2, 0.2),
+    new Vector2(-0.9, 0.3), new Vector2(-0.7, 0.3), new Vector2(-0.5, 0.3), new Vector2(-0.3, 0.3), new Vector2(-0.1, 0.3),new Vector2(0.7, 0.3), new Vector2(0.5, 0.3), new Vector2(0.3, 0.3), new Vector2(0.1, 0.3),
+    new Vector2(-0.8, 0.4), new Vector2(-0.6, 0.4), new Vector2(-0.4, 0.4), new Vector2(-0.2, 0.4), new Vector2(0, 0.4),new Vector2(0.8, 0.4), new Vector2(0.6, 0.4), new Vector2(0.4, 0.4), new Vector2(0.2, 0.4),
+    new Vector2(-0.9, 0.5), new Vector2(-0.7, 0.5), new Vector2(-0.5, 0.5), new Vector2(-0.3, 0.5), new Vector2(-0.1, 0.5),new Vector2(0.7, 0.5), new Vector2(0.5, 0.5), new Vector2(0.3, 0.3), new Vector2(0.1, 0.5)
 ];
 
 export default class Pegboard {
@@ -53,6 +56,7 @@ export default class Pegboard {
     }
 
     step = (deltaT: number) => {
+        console.log('deltat', deltaT);
         if (this.balls.length === 0) { return; }
         let ballsAtRest = 0;
         let rindex = 0;//jank asf method of checking balls against each other by refrence without duplicates
@@ -84,6 +88,7 @@ export default class Pegboard {
     spawnBall = () => {
         this.balls.push(new BallColliderObject(BALL_START_POS, BALL_RAD));
         this.stage.addChild(this.balls[this.balls.length - 1].g);
+        console.log('ball spawned');
     }
 
     checkEdge(ball: BallColliderObject) {
@@ -183,7 +188,7 @@ export default class Pegboard {
             ball.setVel(Vector2.fromPolar(ball.vel.length(), theta));
 
             // prevent head on collision from resulting in perfect up and down bouncing
-            let velNoiseVect: Vector2 = new Vector2(Math.abs(Math.random() * VEL_NOISE_MAX), Math.abs(Math.random() * VEL_NOISE_MAX));
+            let velNoiseVect: Vector2 = new Vector2(Math.random() * VEL_NOISE_MAX, Math.abs(Math.random() * VEL_NOISE_MAX));
             ball.setVel(ball.vel.add(velNoiseVect).multScalar(BP_RESTITUTION));
 
             //check if velocities are low enough to set the ball to rest
