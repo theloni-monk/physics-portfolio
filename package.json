@@ -2,6 +2,7 @@
   "name": "phys-prj",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://theloni-monk.github.io/physics-portfolio/",
   "dependencies": {
     "@craco/craco": "^6.1.1",
     "@testing-library/jest-dom": "^4.2.4",
@@ -23,7 +24,8 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build && rm -rf docs && mv build docs",
+    "build": "craco build",
+    "deploy": "gh-pages -d build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
