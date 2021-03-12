@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/physics-portfolio/static/css/main.5ce896c2.chunk.css",
-    "main.js": "/physics-portfolio/static/js/main.fef70949.chunk.js",
-    "main.js.map": "/physics-portfolio/static/js/main.fef70949.chunk.js.map",
+    "main.js": "/physics-portfolio/static/js/main.0cab25f0.chunk.js",
+    "main.js.map": "/physics-portfolio/static/js/main.0cab25f0.chunk.js.map",
     "runtime-main.js": "/physics-portfolio/static/js/runtime-main.537bc2ef.js",
     "runtime-main.js.map": "/physics-portfolio/static/js/runtime-main.537bc2ef.js.map",
     "static/js/2.9d722d9c.chunk.js": "/physics-portfolio/static/js/2.9d722d9c.chunk.js",
@@ -16,6 +16,6 @@
     "static/js/runtime-main.537bc2ef.js",
     "static/js/2.9d722d9c.chunk.js",
     "static/css/main.5ce896c2.chunk.css",
-    "static/js/main.fef70949.chunk.js"
+    "static/js/main.0cab25f0.chunk.js"
   ]
 }
