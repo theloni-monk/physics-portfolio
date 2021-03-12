@@ -44,10 +44,6 @@ export default class BallColliderObject implements DynamicBody, CircleCollider, 
         return this.pos.sub(other.pos).length() < this.radius + other.radius
     }
 
-    collide(other:CircleCollider, cofRestitution:number | 1){
-        //WRITEME collision
-    }
-
     posToPx(sb:screenBounds){
         let px = ((this.pos.x - sb.startX) / scalew(sb.screenWidth, sb));
         let py = ((-1 * (this.pos.y - sb.endY)) / scaleh(sb.screenHeight, sb));

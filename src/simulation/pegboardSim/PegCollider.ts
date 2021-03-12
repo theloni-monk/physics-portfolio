@@ -45,5 +45,4 @@ export default class PegColliderObject implements CircleCollider, Drawable{
         this.g.endFill();
     }
 
-    collide(other:CircleCollider){}
 }
