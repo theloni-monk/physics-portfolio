@@ -48,7 +48,7 @@ export default class pegboardSim extends Component<{}, iState>{
         this.renderTarget.appendChild(this.app.view);
         this.app.start(); //start renderer internal update ticker;
         this.app.stage.addChild(this.G);
-        this.board = new Pegboard(this.app.stage, [this.screen.startX,this.screen.endX], [this.screen.startY, this.screen.endY]);
+        this.board = new Pegboard(this.app.stage, [this.screen.startX, this.screen.endX], [this.screen.startY, this.screen.endY]);
     }
 
     initSim = () => {
@@ -57,22 +57,22 @@ export default class pegboardSim extends Component<{}, iState>{
         if (this.board) this.G.clear();
 
         this.app.stage.addChild(this.G);
-        updateTicker.add(deltaT=>this.update(deltaT/70));
+        updateTicker.add(deltaT => this.update(deltaT / 75));
     }
     componentDidMount() {
         console.log(this.renderTarget.getBoundingClientRect())
         let sw = document.getElementById('sim')?.clientWidth;
         let sh = document.getElementById('sim')?.clientHeight;
         sw = sw ? sw : window.innerWidth;
-        sh = sh? sh: window.innerHeight
-    
-        let ratio = sw/sh;
+        sh = sh ? sh : window.innerHeight
+
+        let ratio = sw / sh;
 
 
         this.screen = {
-            screenWidth: sw, 
-            screenHeight: sh, 
-            startX: -ratio * BOARDLEN / 2, endX: ratio * BOARDLEN/2,
+            screenWidth: sw,
+            screenHeight: sh,
+            startX: -ratio * BOARDLEN / 2, endX: ratio * BOARDLEN / 2,
             startY: -BOARDLEN, endY: 0
         }
 
@@ -81,7 +81,7 @@ export default class pegboardSim extends Component<{}, iState>{
         this.initSim();
     }
 
-    
+
 
     draw = () => {
         this.G.clear();
@@ -92,7 +92,7 @@ export default class pegboardSim extends Component<{}, iState>{
 
     update = (deltaT: number) => {
         if (this.state.paused) return;
-        
+
         /**UPDATE LOGIC */
 
         //update vel, pos
@@ -100,20 +100,34 @@ export default class pegboardSim extends Component<{}, iState>{
         this.draw();
     }
 
-    debounced = true;
-    handlePress = (e: KeyboardEvent) => {
-        if (e.code === 'Space' && this.debounced) {
-            this.board.spawnBall(); 
-            this.debounced = false;
+    handleKeyDown = (e: KeyboardEvent) => {
+
+        if (e.code === 'Space') {
+            e.preventDefault();
+
         }
 
-        setTimeout(() => { this.debounced = true }, 250);
+
+    }
+
+    debounced = true;
+    handleKeyUp = (e: KeyboardEvent) => {
+
+        if (e.code === 'Space') {
+            e.preventDefault();
+            if (this.debounced) {
+                this.board.spawnBall();
+                this.debounced = false;
+                setTimeout(() => { this.debounced = true }, 250);
+            }
+        }
     }
 
     render() {
         if (this.state.goBack) return <Redirect to={{ pathname: '/' }} />
         let component = this;
-        document.addEventListener('keyup', (e) => { this.handlePress(e) });
+        window.addEventListener('keydown', (e) => this.handleKeyDown(e));
+        window.addEventListener('keyup', (e) => this.handleKeyUp(e))
         return (
             <div className="sim-wrapper">
                 <div className="sim-header">Pegboard Simulation</div>
@@ -127,7 +141,7 @@ export default class pegboardSim extends Component<{}, iState>{
 
                 </div>
 
-                <div className="sim-content" id = 'sim' ref={(thisDiv: HTMLDivElement) => { component.renderTarget = thisDiv }}
+                <div className="sim-content" id='sim' ref={(thisDiv: HTMLDivElement) => { component.renderTarget = thisDiv }}
                     onMouseMove={(e) => { }}
                 />
                 <div className="sim-footer">Written by Theo Cooper</div>
