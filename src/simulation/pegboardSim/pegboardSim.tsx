@@ -57,7 +57,7 @@ export default class pegboardSim extends Component<{}, iState>{
         if (this.board) this.G.clear();
 
         this.app.stage.addChild(this.G);
-        updateTicker.add(deltaT => this.update(deltaT / 75));
+        if(!updateTicker.started) updateTicker.add(deltaT => this.update(deltaT / 35));
     }
     componentDidMount() {
         console.log(this.renderTarget.getBoundingClientRect())
@@ -101,24 +101,19 @@ export default class pegboardSim extends Component<{}, iState>{
     }
 
     handleKeyDown = (e: KeyboardEvent) => {
-
         if (e.code === 'Space') {
-            e.preventDefault();
-
+            e.preventDefault(); // stop space from scrolling
         }
-
-
     }
 
     debounced = true;
     handleKeyUp = (e: KeyboardEvent) => {
-
         if (e.code === 'Space') {
             e.preventDefault();
             if (this.debounced) {
                 this.board.spawnBall();
                 this.debounced = false;
-                setTimeout(() => { this.debounced = true }, 250);
+                setTimeout(() => { this.debounced = true }, 250); //prevent spamming
             }
         }
     }
