@@ -15,7 +15,6 @@ export class BoundingBox{
         return (point.x>this.tl.x && point.x<this.br.x)&&(point.y<this.tl.y && point.y>this.br.y)
     }
 
-    //WRITEME: AABB collision
     /**Implementation of standard AABB collision detection */
     intersection(other:BoundingBox):boolean{
         return true

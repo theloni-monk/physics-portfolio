@@ -1,6 +1,5 @@
 import React,{Component} from 'react'
 import * as PIXI from 'pixi.js'
-//TODO organize all this code
 import Drawable, {screenBounds} from './IDrawable'
 import DynamicBody from './IDynamicBody'
 import Vector2 from './utils/vect'
@@ -17,7 +16,7 @@ const PLANET_RAD = 3.1855 //km
 const BODY_RAD = 0.5 //km(idk)
 const PLANET_MASS = 6000000000000 //kg
 const ESCAPE_VEL =  3.1 //km/s
-const GRAV_CONST = 0.0000000000066 
+const GRAV_CONST = 0.0000000000067
 
 /**UNIQUE ACTOR */
 interface igrav extends DynamicBody, Drawable{}

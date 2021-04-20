@@ -9,8 +9,6 @@ export const App = () => { //Functional Component
   useEffect(()=>{ // onmount
   },[])
 
-
-  //TODO: deploy base mvp to github pages
   return (
         <Switch>
           <Route exact path = '/' component = {Home}/>
@@ -18,6 +16,7 @@ export const App = () => { //Functional Component
           <Route exact path = '/particlesim' component = {SIMS.BasicParticleSim} />
           <Route exact path = '/orbitsim' component = {SIMS.OrbitSim} />
           <Route exact path = '/pegboard' component = {SIMS.pegboardSim} />
+          <Route exact path = '/universal-gravitation' component = {SIMS.threeBodySim} />
         </Switch>
   );
 }

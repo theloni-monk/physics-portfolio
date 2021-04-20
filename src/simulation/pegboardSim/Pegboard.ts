@@ -1,4 +1,3 @@
-import CircleCollider from "../ICircleCollider";
 import BallColliderObject from "./BallCollider";
 import PegColliderObject from "./PegCollider";
 import Vector2 from "../utils/vect";

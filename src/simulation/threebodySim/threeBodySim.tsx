@@ -1,29 +1,28 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
-import Pegboard from './Pegboard'
 import * as PIXI from 'pixi.js'
 import { screenBounds } from '../IDrawable'
+import GravSystem from './GravSystem'
+import Vector2 from '../utils/vect'
 
 /**
  * CONSTANTS
  */
-const BOARDLEN = 20;
+const SPACE_HEIGHT = 20;
 const updateTicker = new PIXI.Ticker();
 interface iState {
     paused: boolean,
     goBack: boolean
 }
-export default class pegboardSim extends Component<{}, iState>{
+export default class threeBodySim extends Component<{}, iState>{
     protected renderTarget: HTMLDivElement
     protected G: PIXI.Graphics
     protected app: PIXI.Application
     protected prevUpdateTime: number
     protected screen: screenBounds
-    protected timeoutPtr: any //weird js pointer type
-    readonly fps: number = 244;
     protected title: string
 
-    board: Pegboard;
+    gravSys: GravSystem;
 
     constructor(props: any) {
         super(props);
@@ -48,16 +47,17 @@ export default class pegboardSim extends Component<{}, iState>{
         this.renderTarget.appendChild(this.app.view);
         this.app.start(); //start renderer internal update ticker;
         this.app.stage.addChild(this.G);
-        this.board = new Pegboard(this.app.stage, [this.screen.startX, this.screen.endX], [this.screen.startY, this.screen.endY]);
+        this.gravSys = new GravSystem(this.app.stage, [this.screen.startX, this.screen.endX], [this.screen.startY, this.screen.endY]);
+        
     }
 
     initSim = () => {
-        console.log('initsim called')
-        if (this.timeoutPtr) clearTimeout(this.timeoutPtr);
-        if (this.board) this.G.clear();
-
+        console.log('initsim called');
+        if (this.gravSys) this.G.clear();
+        this.gravSys.spawnBody(new Vector2(0,-1));
+        this.gravSys.spawnBody(new Vector2(0, -5))
         this.app.stage.addChild(this.G);
-        if(!updateTicker.started) updateTicker.add(deltaT => this.update(deltaT / 35));
+        if(!updateTicker.started) updateTicker.add((deltaT:number) => this.update(deltaT / 35));
     }
 
     componentDidMount() {
@@ -72,8 +72,8 @@ export default class pegboardSim extends Component<{}, iState>{
         this.screen = {
             screenWidth: sw,
             screenHeight: sh,
-            startX: -ratio * BOARDLEN / 2, endX: ratio * BOARDLEN / 2,
-            startY: -BOARDLEN, endY: 0
+            startX: -ratio * SPACE_HEIGHT / 2, endX: ratio * SPACE_HEIGHT / 2,
+            startY: -SPACE_HEIGHT, endY: 0
         }
 
         console.log(this.screen.screenWidth, this.screen.screenHeight)
@@ -82,11 +82,10 @@ export default class pegboardSim extends Component<{}, iState>{
     }
 
 
-
     draw = () => {
         this.G.clear();
         this.G.beginFill(0);
-        this.board.draw(this.screen);
+        this.gravSys.draw(this.screen);
         this.G.endFill();
     }
 
@@ -96,8 +95,12 @@ export default class pegboardSim extends Component<{}, iState>{
         /**UPDATE LOGIC */
 
         //update vel, pos
-        this.board.step(deltaT);
+        this.gravSys.step(deltaT);
         this.draw();
+    }
+
+    handleClick = (e:any) =>{ //FIXME
+        console.log(e);
     }
 
     handleKeyDown = (e: KeyboardEvent) => {
@@ -110,11 +113,6 @@ export default class pegboardSim extends Component<{}, iState>{
     handleKeyUp = (e: KeyboardEvent) => {
         if (e.code === 'Space') {
             e.preventDefault();
-            if (this.debounced) {
-                this.board.spawnBall();
-                this.debounced = false;
-                setTimeout(() => { this.debounced = true }, 250); //prevent spamming
-            }
         }
     }
 
@@ -137,7 +135,7 @@ export default class pegboardSim extends Component<{}, iState>{
                 </div>
 
                 <div className="sim-content" id='sim' ref={(thisDiv: HTMLDivElement) => { component.renderTarget = thisDiv }}
-                    onMouseMove={(e) => { }}
+                    onMouseDown={(e)=>this.handleClick(e)}
                 />
                 <div className="sim-footer">Written by Theo Cooper</div>
 
